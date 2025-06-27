@@ -1,0 +1,16 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: ${TEST_TASK_BOT_DATASOURCE_URL:jdbc:postgresql://localhost:5432/backend_db?user=postgres&password=postgres}
+    username: ${TEST_TASK_BOT_DATASOURCE_USERNAME:user}
+    password: ${TEST_TASK_BOT_DATASOURCE_PASSWORD:password}
+    driverClassName: org.postgresql.Driver
+
+bot:
+  command:
+    begin: ${BOT_COMMAND:/start}
+    poll: ${BOT_COMMAND_POLL:/form}
+    report: ${BOT_COMMAND_REPORT:/report}
+  token:
+    value: ${BOT_TOKEN:7823954094:AAG9kIv-cPgX1D_2bD-8cVpui7cg9qgzz7U}
