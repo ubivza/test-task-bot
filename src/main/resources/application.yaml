@@ -2,14 +2,16 @@ spring:
   main:
     banner-mode: off
   datasource:
-    url: ${TEST_TASK_BOT_DATASOURCE_URL:jdbc:postgresql://localhost:5432/test_bot?user=postgres&password=postgres}
+    url: ${TEST_TASK_BOT_DATASOURCE_URL:jdbc:postgresql://localhost:5430/test_bot?user=user&password=password}
     username: ${TEST_TASK_BOT_DATASOURCE_USERNAME:user}
     password: ${TEST_TASK_BOT_DATASOURCE_PASSWORD:password}
     driverClassName: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:changelog/master.xml
 
 bot:
   command:
-    begin: ${BOT_COMMAND:/start}
+    begin: ${BOT_COMMAND_BEGIN:/start}
     poll: ${BOT_COMMAND_POLL:/form}
     report: ${BOT_COMMAND_REPORT:/report}
   token:

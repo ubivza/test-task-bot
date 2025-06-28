@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_bot
+      PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d test_bot" ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    ports:
+      - "5430:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bot_app
+    environment:
+      TEST_TASK_BOT_DATASOURCE_URL: jdbc:postgresql://postgres:5432/test_bot
+      TEST_TASK_BOT_DATASOURCE_USERNAME: user
+      TEST_TASK_BOT_DATASOURCE_PASSWORD: password
+
+      BOT_COMMAND_BEGIN: /start
+      BOT_COMMAND_POLL: /form
+      BOT_COMMAND_REPORT: /report
+
+      BOT_TOKEN: 7823954094:AAG9kIv-cPgX1D_2bD-8cVpui7cg9qgzz7U
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
