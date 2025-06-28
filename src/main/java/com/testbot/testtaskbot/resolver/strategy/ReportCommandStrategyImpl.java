@@ -1,6 +1,9 @@
 package com.testbot.testtaskbot.resolver.strategy;
 
 import com.testbot.testtaskbot.config.BotCommandsProperties;
+import com.testbot.testtaskbot.facade.WordReportFacade;
+import com.testbot.testtaskbot.service.FormService;
+import com.testbot.testtaskbot.service.UserSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,6 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class ReportCommandStrategyImpl implements CommandStrategy {
 
     private final BotCommandsProperties commandsProperties;
+    private final UserSessionService userSessionService;
+    private final WordReportFacade wordReportFacade;
+    private final FormService formService;
 
     @Override
     public String getCommand() {
@@ -18,6 +24,9 @@ public class ReportCommandStrategyImpl implements CommandStrategy {
 
     @Override
     public void handle(Update update) {
-        System.out.println("Report");
+        Long chatId = update.getMessage().getChatId();
+        userSessionService.revokeUserSession(chatId);
+
+        wordReportFacade.generateReport(chatId, formService.getAll());
     }
 }

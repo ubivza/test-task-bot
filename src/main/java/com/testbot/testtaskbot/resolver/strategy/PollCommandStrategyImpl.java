@@ -1,6 +1,7 @@
 package com.testbot.testtaskbot.resolver.strategy;
 
 import com.testbot.testtaskbot.config.BotCommandsProperties;
+import com.testbot.testtaskbot.service.FormProcessService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class PollCommandStrategyImpl implements CommandStrategy {
 
     private final BotCommandsProperties commandsProperties;
+    private final FormProcessService formProcessService;
 
     @Override
     public String getCommand() {
@@ -18,6 +20,6 @@ public class PollCommandStrategyImpl implements CommandStrategy {
 
     @Override
     public void handle(Update update) {
-        System.out.println("Poll");
+        formProcessService.startForm(update.getMessage().getChatId());
     }
 }
