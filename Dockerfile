@@ -1,16 +1,14 @@
-FROM eclipse-temurin:17-jdk as builder
+FROM gradle:8.10.2-jdk17 AS builder
 
 WORKDIR /app
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
+COPY build.gradle settings.gradle ./
+RUN gradle dependencies --no-daemon
 
-RUN ./gradlew clean build -x test --no-daemon --stacktrace
+COPY src ./src
+RUN gradle clean build -x test --no-daemon
 
-FROM eclipse-temurin:17-jre
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
